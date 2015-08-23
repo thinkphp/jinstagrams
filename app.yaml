@@ -20,3 +20,11 @@ handlers:
 - url: /scripts
   static_dir: scripts
   mime_type: application/javascript
+
+- url: /instacam.png
+  static_files: instacam.png
+  upload: instacam.png
+
+- url: /loader.gif
+  static_files: loader.gif
+  upload: loader.gif

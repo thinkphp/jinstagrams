@@ -14,11 +14,39 @@ h1 { font-size: 26px/1.4; font-family: Georgia,Times,serif;color: #3c3; margin-l
 #container  img{ float: left; width: 170px; display: inline-block; position: relative; margin-right: 20px; margin-bottom: 12px; }
 #photos img{ border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
 
+
+#sform { width: 710px; margin-left: 100px; margin-top: 25px; margin-bottom: 35px; }
+#sform #s { 
+padding: 10px 11px; 
+padding-left: 60px;
+color: #999; 
+width: 600px; 
+border: 1px solid #ddd; 
+font-size: 22px; 
+
+background: url('instacam.png') 6px 7px no-repeat;
+transition: box-shadow 0.15s linear 0s, color 0.15s linear 0s;
+-webkit-transition: box-shadow 0.25s linear 0s, color 0.15s linear 0s;
+-moz-transition: box-shadow 0.25s linear 0s, color 0.15s linear 0s;
+-o-transition: box-shadow 0.25s linear 0s, color 0.15s linear 0s;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset; 
+font-family: Optima, Segoe, "Segoe UI", Candara, Calibri, Arial, sans-serif; 
+}
+#sform #s:focus { 
+color: #767676;
+border-color: #c5d7ee;
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(170, 200, 240, 0.9);
+-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(170, 200, 240, 0.9);
+-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset, 0 0 8px rgba(170, 200, 240, 0.9);
+}
+
  #ft p{color:#666;text-align: left;}
  #ft a{color:#ccc;}
 </style>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript" src="scripts/instagram.js"></script>
+<script type="text/javascript" src="../scripts/instagram.js"></script>
 
   <script>
 
@@ -41,7 +69,10 @@ h1 { font-size: 26px/1.4; font-family: Georgia,Times,serif;color: #3c3; margin-l
     } 
 
     function didLoadInstagram(event, response) {
+
       var that = this;
+
+          $("input.sfield").css("background:'';")
 
           $.each(response.data, function(i, photo){
 
@@ -49,14 +80,52 @@ h1 { font-size: 26px/1.4; font-family: Georgia,Times,serif;color: #3c3; margin-l
           })
     }
 
+    function search() {
+
+         var q = $("#s").val();
+
+         var clientId = '95e09e6147344028bfb8972ce0f3a0b0';
+
+         $('.instagram.tag').instagram({
+             hash: q,
+             count: 16,
+             clientId: clientId
+         });
+    } 
+
     $(document).ready(function() {
 
+      var timer;
+
+      $("#s").bind('keydown', function( e ){
+
+       if(e.keyCode == '32' || e.keyCode == '188' || e.keyCode == '189' || e.keyCode == '13' || e.keyCode == '190' || e.keyCode == '219' || e.keyCode == '221' || e.keyCode == '191' || e.keyCode == '220') {
+
+          e.preventDefault();
+        
+       } else {
+   		      clearTimeout(timer);
+
+			timer = setTimeout(function() {
+
+                        $('.instagram.tag').empty()
+
+                        $('input.sfield').css("background: url('loader.gif') 10px 7px no-repeat;")
+
+                        search()            
+
+			}, 900);   
+       }
+
+      }) 
 
       var clientId = '95e09e6147344028bfb8972ce0f3a0b0';
       
       $('.instagram.tag').on('didLoadInstagram', didLoadInstagram);
+
       $('.instagram.tag').instagram({
-        hash: 'bucegi',
+
+        hash: 'vamaveche',
         count: 16,
         clientId: clientId
       });
@@ -70,6 +139,20 @@ h1 { font-size: 26px/1.4; font-family: Georgia,Times,serif;color: #3c3; margin-l
 <body>
 
 <h1>jQuery Instagram</h1>
+
+<div id="bd" role="main">
+
+      <div id="w">
+		<section id="sform">
+			<input type="text" id="s" name="s" class="sfield" placeholder="Enter a search tag..." autocomplete="off">
+		</section>
+		
+		<section id="photos"></section>
+	</div>
+
+	</div>
+
+
 <div id="container">
 
   <div id="photos">
