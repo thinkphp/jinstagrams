@@ -1,0 +1,22 @@
+application: jinstagrams
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: no
+
+handlers: 
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+
+- url: /
+  static_files: static/instagram.html
+  upload: static/instagram.html
+
+- url: /instagram.html
+  static_files: static/instagram.html
+  upload: static/instagram.html
+
+- url: /scripts
+  static_dir: scripts
+  mime_type: application/javascript

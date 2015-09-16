@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta charset='utf-8'>
+<title>jQuery Instagram on Google App Engine</title>
+<style>
+
+* { margin: 0; padding: 0; outline: none; }
+html { height: 105%; }
+body { font-family: Calibri, Candara, Segoe, "Segoe UI", Optima, Arial, sans-serif; }
+h1 { font-size: 26px/1.4; font-family: Georgia,Times,serif;color: #3c3; margin-left: 100px;margin-bottom: 50px}
+
+#container { margin-left: 100px; text-align: center; }
+#container  img{ float: left; width: 170px; display: inline-block; position: relative; margin-right: 20px; margin-bottom: 12px; }
+#photos img{ border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; }
+
+ #ft p{color:#666;text-align: left;}
+ #ft a{color:#ccc;}
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/instagram.js"></script>
+
+  <script>
+
+    function createPhoto( photo ) {
+
+      var innerHtml = $('<img>')
+        .addClass('instagram-image')
+        .attr('src', photo.images.thumbnail.url);
+
+      innerHtml = $('<a>')
+        .attr('target', '_blank')
+        .attr('href', photo.link)
+        .append(innerHtml);
+
+      return $('<div>')
+        .addClass('instagram-placeholder')
+        .attr('id', photo.id)
+        .append(innerHtml);
+
+    } 
+
+    function didLoadInstagram(event, response) {
+      var that = this;
+
+          $.each(response.data, function(i, photo){
+
+                 $(that).append(createPhoto( photo ))  
+          })
+    }
+
+    $(document).ready(function() {
+
+
+      var clientId = '95e09e6147344028bfb8972ce0f3a0b0';
+      
+      $('.instagram.tag').on('didLoadInstagram', didLoadInstagram);
+      $('.instagram.tag').instagram({
+        hash: 'bucegi',
+        count: 16,
+        clientId: clientId
+      });
+      
+    });
+  </script>
+
+
+
+</head>
+<body>
+
+<h1>jQuery Instagram</h1>
+<div id="container">
+
+  <div id="photos">
+
+     <div class="instagram tag"></div>
+
+  </div>
+
+</div>
+
+<div id="ft" role="contentinfo"><p>Created by <a href="http://thinkphp.ro">Adrian Statescu</a></p></div>
+</body>
+</html>
+
